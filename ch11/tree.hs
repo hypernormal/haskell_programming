@@ -43,5 +43,5 @@ postorder (Node left a right) = concat [postorder left, postorder right, [a]]
 foldTree :: (a -> b -> b) -> b -> BinaryTree a -> b
 foldTree f b bt = foldr f b (preorder bt)
 
-mapTree' :: (a -> b) -> BinaryTree a -> BinaryTree b
-mapTree' f bt = undefined
+mapTree' :: (a -> b) -> BinaryTree a -> [b]
+mapTree' f bt = foldTree ((:) . f) [] bt
