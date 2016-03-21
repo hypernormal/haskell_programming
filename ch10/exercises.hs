@@ -26,7 +26,7 @@ myReverse :: [a] -> [a]
 myReverse = foldr (\x y -> y ++ [x]) []
 
 myMap :: (a -> b) -> [a] -> [b]
-myMap f xs = foldr (\x y -> [f x] ++ y) [] xs
+myMap f xs = foldr ((:) . f) [] xs
 
 myFilter :: (a -> Bool) -> [a] -> [a]
 myFilter f xs = foldr (\x y -> if f x then x : y else y) [] xs
@@ -35,7 +35,7 @@ squish :: [[a]] -> [a]
 squish = foldr (++) []
 
 squishMap :: (a -> [b]) -> [a] -> [b]
-squishMap f xs = foldr (\x y -> f x ++ y) [] xs
+squishMap f xs = foldr ((++) . f) [] xs
 
 squishAgain :: [[a]] -> [a]
 squishAgain = squishMap id
