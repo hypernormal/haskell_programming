@@ -10,21 +10,15 @@ clownCar = Car Tata (Price 7000)
 doge = Plane PapuAir (Size 200)
 
 isCar :: Vehicle -> Bool
-isCar vehicle =
-  case vehicle of
-    Car _ _ -> True
-    _ -> False
+isCar (Car _ _) = True
+isCar _ = False
 
 isPlane :: Vehicle -> Bool
-isPlane vehicle =
-  case vehicle of
-    Plane _ _ -> True
-    _ -> False
+isPlane (Plane _ _) = True
+isPlane _ = False
 
 areCars :: [Vehicle] -> [Bool]
 areCars = map isCar
 
 getManu :: Vehicle -> Manufacturer
-getManu vehicle =
-  case vehicle of
-    Car manu _ -> manu
+getManu (Car manu _) = manu
