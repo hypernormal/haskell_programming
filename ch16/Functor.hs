@@ -72,6 +72,65 @@ propThreeId x = functorIdentity x
 propThreeComp :: Three Bool Char Int -> Bool
 propThreeComp x = functorCompose (*3) (+2) x
 
+-- three'
+data Three' a b = Three' a b b deriving (Eq, Show)
+
+instance Functor (Three' a) where
+  fmap f (Three' a b b') = Three' a (f b) (f b')
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Three' a b) where
+  arbitrary = do
+    a <- arbitrary
+    b <- arbitrary
+    b' <- arbitrary
+    return $ Three' a b b'
+
+propThree'Id :: Three' Bool Int -> Bool
+propThree'Id x = functorIdentity x
+
+propThree'Comp :: Three' Bool Int -> Bool
+propThree'Comp x = functorCompose (*3) (*2) x
+
+-- four
+data Four a b c d = Four a b c d deriving (Eq, Show)
+
+instance Functor (Four a b c) where
+  fmap f (Four a b c d) = Four a b c (f d)
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) => Arbitrary (Four a b c d) where
+  arbitrary = do
+    a <- arbitrary
+    b <- arbitrary
+    c <- arbitrary
+    d <- arbitrary
+    return $ Four a b c d
+
+propFourId :: Four Bool Int Char String -> Bool
+propFourId x = functorIdentity x
+
+propFourComp :: Four Bool Int Char String -> Bool
+propFourComp x = functorCompose (++ " yo!") (head) x
+
+-- four'
+data Four' a b = Four' a a a b deriving (Eq, Show)
+
+instance Functor (Four' a) where
+  fmap f (Four' a a' a'' b) = Four' a a' a'' (f b)
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Four' a b) where
+  arbitrary = do
+    a <- arbitrary
+    a' <- arbitrary
+    a'' <- arbitrary
+    b <- arbitrary
+    return $ Four' a a' a'' b
+
+propFour'Id :: Four' Int String -> Bool
+propFour'Id x = functorIdentity x
+
+propFour'Comp :: Four' Int String -> Bool
+propFour'Comp x = functorCompose (++ "world") (reverse) x
+
 main :: IO ()
 main = do
   quickCheck propPairId
@@ -80,3 +139,9 @@ main = do
   quickCheck propTwoComp
   quickCheck propThreeId
   quickCheck propThreeComp
+  quickCheck propThree'Id
+  quickCheck propThree'Comp
+  quickCheck propFourId
+  quickCheck propFourComp
+  quickCheck propFour'Id
+  quickCheck propFour'Comp
