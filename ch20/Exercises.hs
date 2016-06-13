@@ -30,13 +30,29 @@ length' = foldr (\_ y -> y+1) 0
 toList :: (Foldable t) => t a -> [a]
 toList = foldr (\x y -> x : y) []
 
+fold' :: (Foldable t, Monoid m) => t m -> m
+fold' = foldr mappend mempty
+
+fold'' :: (Foldable t, Monoid m) => t m -> m
+fold'' = foldMap id
+
+foldMap' :: (Foldable t, Monoid m) => (a -> m) -> t a -> m
+foldMap' f xs = foldr (\x y -> (f x) `mappend` y) mempty xs
+
+data Constant a b = Constant a deriving Show
+
+instance Foldable (Constant a) where
+  foldr _ a _  = a
+
+filterF :: (Applicative f, Foldable t, Monoid (f a)) => (a -> Bool) -> t a -> f a
+filterF f xs = foldMap (\x -> if f x then pure x else mempty) xs
+
 data Tree a = Empty | Leaf a | Node (Tree a) a (Tree a) deriving Show
 
 instance Foldable Tree where
   foldMap f Empty = mempty
   foldMap f (Leaf x) = f x
   foldMap f (Node l k r) = foldMap f l `mappend` f k `mappend` foldMap f r
-  
 
 newtype Min a = Min { getMin :: Maybe a } deriving Show
 instance Ord a => Monoid (Min a) where
