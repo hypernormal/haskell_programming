@@ -11,7 +11,6 @@ import qualified Data.Map as M
 import Data.Text (Text)
 import qualified Data.Text.IO as TIO
 import Test.Hspec
--- parsers 0.12.3, trifecta 1.5.2
 import Text.Trifecta
 
 headerEx :: ByteString
@@ -58,24 +57,6 @@ skipComments = do
 sectionEx :: ByteString
 sectionEx =
   "; ignore me\n[states]\nChris=Texas\n;what\n[countries]\nJames=USA\nLine=Denmark"
-
--- sectionEx' :: ByteString
--- sectionEx' = [r|
--- ; ignore me
--- [states]
--- Chris=Texas
--- |]
-
--- sectionEx'' :: ByteString
--- sectionEx'' = [r|
--- ; comment
--- [section]
--- host=wikipedia.org
--- alias=claw
---
--- [whatisit]
--- red=intoothandclaw
--- |]
 
 data Section =
   Section Header Assignments
